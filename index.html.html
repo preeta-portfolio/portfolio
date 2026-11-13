@@ -109,6 +109,7 @@ dialog[open]{animation:pop .25s ease-out}
 .stage video{width:100%;height:100%;object-fit:cover}
 .stage.emb{aspect-ratio:auto;height:620px;background:var(--surface);padding:0;border:1px solid var(--line)}
 .stage iframe{width:100%;height:100%;border:0}
+.chip.num{min-width:44px;padding:9px 0;text-align:center}
 .m h3{font-size:1.8rem}
 .m dl{margin:18px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.95rem}
 .m dt{color:var(--muted)}.m dd{margin:0}
@@ -173,11 +174,11 @@ const OPEN=id=>isD(id)?"https://drive.google.com/file/d/"+id.slice(6)+"/view":IG
 /* SHOWREEL: upload your video file next to index.html (e.g. showreel.mp4) and put its name in src. Optional poster = cover image file. */
 const SHOWREEL={src:"",poster:""};
 const COLLECTIONS=[
-{name:"Airblack beauty reels",client:"Airblack Beauty Academy",desc:"Short-form reels for a beauty academy, shot and edited end to end.",tools:"Premiere Pro",h:330,reels:["DdG5XgHCP34","DctTlzdCExM","DbGhN93llZC","DZsNbJHpScR","DPEZjVtiYrr"]},
+{name:"Airblack Beauty Academy",client:"Airblack Beauty Academy",desc:"Short-form reels for a beauty academy, shot and edited end to end.",tools:"Premiere Pro",h:330,reels:["DdG5XgHCP34","DctTlzdCExM","DbGhN93llZC","DZsNbJHpScR","DPEZjVtiYrr"]},
 {name:"Tutorials",desc:"Tutorial reels, shot and edited to be easy to follow.",h:200,reels:["DHbObu2oVFx","DK2FBZeTe_Z"]},
 {name:"Travel",desc:"Travel reels.",h:150,reels:["DfoADdxoeR5","DVJDaVAiOAx","DUBD7BmiPo6","DB6tllYt8VB","C91ORkEtRUO"]},
-{name:"Beauty & makeup",desc:"Beauty and makeup reels.",h:10,reels:["CxGEcQUyne6","CxCpmsOrvfS","CvzGINfu9Ix"]},
-{name:"BFBL instructional series",client:"L\u2019Or\u00e9al Foundation, Beauty for a Better Life",desc:"Step-by-step instructional videos for the BFBL training programme, made for learners to follow on a phone.",tools:"Premiere Pro, Canva",h:260,unit:"video",reels:["drive:1K1CZ6VErGG_VVx7BFZGkuZVjyfKDklPE","drive:1SEql8reYHVJgmBesD42d-H_3COH7rio9"]}
+{name:"Beauty & Makeup",desc:"Beauty and makeup reels.",h:10,reels:["CxGEcQUyne6","CxCpmsOrvfS","CvzGINfu9Ix"]},
+{name:"BFBL Instructional Series",client:"L\u2019Or\u00e9al Foundation, Beauty for a Better Life",desc:"Step-by-step instructional videos for the BFBL training programme, made for learners to follow on a phone.",tools:"Premiere Pro, Canva",h:260,unit:"video",reels:["drive:1K1CZ6VErGG_VVx7BFZGkuZVjyfKDklPE","drive:1SEql8reYHVJgmBesD42d-H_3COH7rio9"]}
 ];
 const CLIPS=[ /* track, label, start%, width% */
 ["v","Hook",0,14],["v","Demo close-ups",15,30],["v","Before / after",46,22],["v","CTA",69,30],
@@ -208,10 +209,10 @@ $("#grid").innerHTML=COLLECTIONS.map((w,i)=>`<button class="coll" type="button" 
 /* modal */
 const dlg=$("#dlg");let ci=0,ri=0,opener=null;
 function render(c,r,f){ci=c;ri=r;const w=COLLECTIONS[c],n=w.reels.length,id=w.reels[r];
- $("#m").innerHTML=`<div class="stage${id?" emb":""}" style="--h:${w.h}">${id?`<iframe src="${EMB(id)}" title="${esc(w.name)} reel ${r+1}" loading="lazy" allowfullscreen></iframe>`:`<span>Preview coming soon.</span>`}</div>
+ $("#m").innerHTML=`<div class="left"><div class="stage${id?" emb":""}" style="--h:${w.h}">${id?`<iframe src="${EMB(id)}" title="${esc(w.name)} reel ${r+1}" loading="lazy" allowfullscreen></iframe>`:`<span>Preview coming soon.</span>`}</div>${n>1?`<div class="reelnav" role="group" aria-label="Reels in this collection">${w.reels.map((_,k)=>`<button class="chip num" type="button" data-k="${k}" aria-label="${w.unit==="video"?"Video":"Reel"} ${k+1}" aria-pressed="${k===r}">${k+1}</button>`).join("")}</div>`:""}</div>
  <div><h3 id="mt">${esc(w.name)}</h3><p style="color:var(--muted)">${esc(w.desc)}</p>
- <dl>${w.client?`<dt>Client</dt><dd>${esc(w.client)}</dd>`:""}<dt>Scope</dt><dd>${esc(cnt(w))}</dd>${w.tools?`<dt>Tools</dt><dd>${esc(w.tools)}</dd>`:""}</dl>
- ${n>1?`<div class="reelnav" role="group" aria-label="Reels in this collection">${w.reels.map((_,k)=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===r}">${w.unit==="video"?"Video":"Reel"} ${k+1}</button>`).join("")}</div>`:""}
+ ${w.client?`<dl><dt>Client</dt><dd>${esc(w.client)}</dd></dl>`:""}
+
  <div class="nav2">${id?`<a class="btn main" href="${OPEN(id)}" target="_blank" rel="noopener">${isD(id)?"Open in Google Drive":"Watch on Instagram"}</a>`:""}${n>1?`<button class="btn" type="button" id="prev">Previous reel</button><button class="btn" type="button" id="next">Next reel</button>`:""}</div></div>`;
  document.querySelectorAll(".reelnav .chip").forEach(b=>b.onclick=()=>render(ci,+b.dataset.k,".reelnav .chip[aria-pressed='true']"));
  const pv=$("#prev"),nx=$("#next");if(pv){pv.onclick=()=>render(ci,(ri-1+n)%n,"#prev");nx.onclick=()=>render(ci,(ri+1)%n,"#next")}
