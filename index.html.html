@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preeta Lahiri – Short-Form Video Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F1F6;--surface:#FFFFFF;--ink:#20182B;--muted:#6A6277;--line:#DDD7E6;--accent:#C2307A;--accent-ink:#FFFFFF;--v:#2B7A8C;--a:#7A5BC4;--fx:#C2307A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17121F;--surface:#221B2E;--ink:#EFEAF5;--muted:#A79FB5;--line:#372E47;--accent:#F06DAA;--accent-ink:#17121F;--v:#4FB3C7;--a:#A58BEA;--fx:#F06DAA;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17121F;--surface:#221B2E;--ink:#EFEAF5;--muted:#A79FB5;--line:#372E47;--accent:#F06DAA;--accent-ink:#17121F;--v:#4FB3C7;--a:#A58BEA;--fx:#F06DAA;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.05;margin:0;letter-spacing:-.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;text-decoration:none;font-size:1.1rem}
+nav{display:flex;gap:6px;align-items:center}
+nav a{text-decoration:none;padding:8px 12px;border-radius:999px;font-size:.95rem;color:var(--muted)}
+nav a:hover{color:var(--ink);background:var(--surface)}
+.theme{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.hero{padding:64px 0 40px}
+.hero h1{font-size:clamp(2.6rem,8vw,5.6rem);font-weight:800;max-width:14ch}
+.hero p.lead{font-size:1.2rem;max-width:52ch;color:var(--muted);margin:22px 0 0}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-block;text-decoration:none;font-weight:600;padding:13px 22px;border-radius:12px;border:1.5px solid var(--ink);cursor:pointer;font:inherit;font-weight:600;background:transparent;color:var(--ink)}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{transform:translateY(-1px)}
+/* timeline */
+.tl{margin-top:44px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 16px;position:relative;overflow:hidden;touch-action:pan-y}
+.tl-top{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin:0 0 10px 56px;font-variant-numeric:tabular-nums}
+.tl-body{position:relative}
+.track{display:flex;align-items:center;height:42px;margin-bottom:6px}
+.track b{width:50px;font-size:.78rem;color:var(--muted);flex:none}
+.lane{position:relative;flex:1;height:100%;background:color-mix(in srgb,var(--line) 45%,transparent);border-radius:8px}
+.clip{position:absolute;top:4px;bottom:4px;border-radius:6px;padding:0 9px;display:flex;align-items:center;font-size:.8rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;opacity:.28;animation:lit .3s forwards}
+.clip.v{background:var(--v)}.clip.a{background:var(--a)}.clip.fx{background:var(--fx)}
+.head{position:absolute;top:-6px;bottom:-4px;left:56px;width:2px;background:var(--accent);animation:sweep 2.6s cubic-bezier(.5,0,.3,1) forwards;pointer-events:none}
+.head::before{content:"";position:absolute;top:0;left:-6px;border:7px solid transparent;border-top:9px solid var(--accent);border-bottom:0}
+.head.live{animation:none}
+@keyframes sweep{from{left:56px}to{left:calc(100% - 2px)}}
+@keyframes lit{to{opacity:1}}
+.stats{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:26px;color:var(--muted)}
+.stats span b{color:var(--ink);font-family:"Bricolage Grotesque",sans-serif;font-size:1.25rem}
+/* work */
+section{padding:56px 0}
+h2{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:800}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 28px}
+.chip{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 16px;border-radius:999px;font:inherit;font-size:.95rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.card{all:unset;cursor:pointer;display:block;border-radius:16px;overflow:hidden;background:var(--surface);border:1px solid var(--line);transition:transform .25s,opacity .25s}
+.card:hover{transform:translateY(-4px)}
+.card:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.card.hide{display:none}
+.thumb{aspect-ratio:9/12;position:relative;background:linear-gradient(160deg,hsl(var(--h) 70% 52%),hsl(calc(var(--h) + 50) 65% 28%));display:flex;align-items:flex-end;padding:14px}
+.thumb .play{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;color:#20182B}
+.thumb .tag{font-size:.78rem;font-weight:600;background:rgba(0,0,0,.45);color:#fff;padding:4px 10px;border-radius:999px}
+.card .txt{padding:14px 16px 16px}
+.card h3{font-size:1.1rem}
+.card p{margin:6px 0 0;color:var(--muted);font-size:.9rem}
+.sample{font-size:.72rem;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:middle;font-family:"Instrument Sans",sans-serif;font-weight:500}
+.grid{margin-top:26px}.reelnav{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+/* about */
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:40px}
+.two p{max-width:60ch;color:var(--muted);font-size:1.05rem}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tools span{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 13px;font-size:.92rem}
+footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted)}
+/* modal */
+dialog{border:none;padding:0;border-radius:20px;background:var(--surface);color:var(--ink);width:min(820px,calc(100% - 28px));max-height:calc(100dvh - 28px);overflow:auto}
+dialog::backdrop{background:rgba(10,6,16,.65)}
+dialog[open]{animation:pop .25s ease-out}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.m{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:26px;padding:22px}
+.stage{aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,hsl(var(--h) 70% 52%),hsl(calc(var(--h) + 50) 65% 28%));display:grid;place-items:center;color:#fff;text-align:center;padding:16px;font-size:.9rem}
+.stage video{width:100%;height:100%;object-fit:cover}
+.stage.emb{aspect-ratio:auto;height:620px;background:var(--surface);padding:0;border:1px solid var(--line)}
+.stage iframe{width:100%;height:100%;border:0}
+.m h3{font-size:1.8rem}
+.m dl{margin:18px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.95rem}
+.m dt{color:var(--muted)}.m dd{margin:0}
+.close{position:absolute;top:12px;right:12px}
+.nav2{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+@media (max-width:720px){nav a.hide-s{display:none}.two,.m{grid-template-columns:1fr}.stage{max-width:260px}.stage.emb{max-width:none;height:580px}.hero{padding-top:40px}}
+@media (prefers-reduced-motion:reduce){.head{animation:none;left:calc(100% - 2px)}.clip{animation:none;opacity:1}dialog[open]{animation:none}html{scroll-behavior:auto}.card,.btn{transition:none}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+<a class="logo" href="#top">Preeta Lahiri</a>
+<nav><a class="hide-s" href="#work">Work</a><a class="hide-s" href="#about">About</a><a href="#contact">Contact</a><button class="theme" id="theme" type="button" aria-label="Switch colour theme">Theme</button></nav>
+</div></header>
+
+<main id="top">
+<div class="wrap hero">
+<h1>Short-form video that teaches, sells and gets watched.</h1>
+<p class="lead">I’m a video editor with 11+ years inside the beauty industry. I shoot and edit reels and instructional videos for brands that need clear, fast, well-paced content.</p>
+<div class="cta"><a class="btn main" href="#work">Watch the work</a><a class="btn" href="https://instagram.com/editsbypreeta" target="_blank" rel="noopener">@editsbypreeta</a></div>
+<div class="tl" id="tl" aria-label="Decorative editing timeline">
+<div class="tl-top"><span>00:00</span><span id="tc">Move across the timeline</span><span>01:00</span></div>
+<div class="tl-body" id="tlb"></div>
+</div>
+<div class="stats"><span><b>30+</b> reels shipped for Airblack</span><span><b>83.7k</b> views on the best reel</span><span><b>7</b> instructional videos for L’Oréal Foundation</span></div>
+</div>
+
+<section id="work"><div class="wrap">
+<h2>Work</h2>
+<div class="grid" id="grid"></div>
+</div></section>
+
+<section id="about"><div class="wrap two">
+<div><h2>Beauty is my edge.</h2>
+<p style="margin-top:18px">I started as a photographer, spent over a decade training beauty professionals, and now bring both into editing. I know how a technique should look on screen, where a viewer needs a close-up, and what makes a tutorial easy to follow.</p>
+<p>I shoot, cut, grade and caption my own footage, so a brief goes from idea to finished reel with one person.</p></div>
+<div><h3>Tools</h3><div class="tools" style="margin-top:14px"><span>Premiere Pro</span><span>After Effects</span><span>CapCut</span><span>VN</span><span>Canva</span><span>Lightroom</span></div></div>
+</div></section>
+</main>
+
+<footer id="contact"><div class="wrap">
+<h2 style="color:var(--ink)">Let’s make something.</h2>
+<p style="margin:14px 0 22px">Open to salaried and freelance editing work. The quickest way to reach me is Instagram.</p>
+<a class="btn main" href="https://instagram.com/editsbypreeta" target="_blank" rel="noopener">Message @editsbypreeta</a>
+</div></footer>
+
+<dialog id="dlg" aria-labelledby="mt"><button class="btn close" id="x" type="button" aria-label="Close">Close</button><div class="m" id="m"></div></dialog>
+
+<script>
+/* EDIT THIS LIST. Each collection holds reels; a reel is its Instagram ID (the part after /reel/ in the link). */
+const IG=id=>"https://www.instagram.com/reel/"+id+"/";
+const COLLECTIONS=[
+{name:"Airblack beauty reels",client:"Airblack Beauty Academy",desc:"Short-form reels for a beauty academy, shot and edited end to end.",tools:"Premiere Pro, CapCut, VN",h:330,reels:["DdG5XgHCP34","DctTlzdCExM","DbGhN93llZC","DZsNbJHpScR","DPEZjVtiYrr"]},
+{name:"Tutorials",desc:"Tutorial reels, shot and edited to be easy to follow.",h:200,reels:["DHbObu2oVFx","DK2FBZeTe_Z"]},
+{name:"Travel",desc:"Travel reels.",h:150,reels:["DfoADdxoeR5","DVJDaVAiOAx","DUBD7BmiPo6","DB6tllYt8VB","C91ORkEtRUO"]},
+{name:"Beauty & makeup",desc:"Beauty and makeup reels.",h:10,reels:["CxGEcQUyne6","CxCpmsOrvfS","CvzGINfu9Ix"]},
+{name:"BFBL instructional series",client:"L\u2019Or\u00e9al Foundation, Beauty for a Better Life",desc:"Step-by-step instructional videos for the BFBL training programme, made for learners to follow on a phone.",tools:"Premiere Pro, Canva",h:260,count:"7 videos",reels:[]}
+];
+const CLIPS=[ /* track, label, start%, width% */
+["v","Hook",0,14],["v","Demo close-ups",15,30],["v","Before / after",46,22],["v","CTA",69,30],
+["a","Voiceover",0,48],["a","Beat drop",50,48],
+["fx","Captions",8,40],["fx","Transition",44,10],["fx","Colour grade",58,40]];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* theme */
+const root=document.documentElement;
+function setTheme(t){root.setAttribute("data-theme",t);try{localStorage.setItem("theme",t)}catch(e){}}
+try{const t=localStorage.getItem("theme");if(t)root.setAttribute("data-theme",t)}catch(e){}
+$("#theme").onclick=()=>{const dark=root.getAttribute("data-theme")==="dark"||(!root.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);setTheme(dark?"light":"dark")};
+
+/* hero timeline */
+const names={v:"V1",a:"A1",fx:"FX"};
+$("#tlb").innerHTML=["v","a","fx"].map(k=>`<div class="track"><b>${names[k]}</b><div class="lane">${CLIPS.filter(c=>c[0]===k).map(c=>`<div class="clip ${k}" style="left:${c[2]}%;width:${c[3]}%;animation-delay:${(c[2]/100*2.4).toFixed(2)}s">${esc(c[1])}</div>`).join("")}</div></div>`).join("")+`<div class="head" id="head"></div>`;
+const head=$("#head"),tlb=$("#tlb"),tc=$("#tc");
+const fmt=r=>{const s=Math.round(r*60);return "00:"+String(s).padStart(2,"0")};
+function follow(e){const lane=tlb.querySelector(".lane").getBoundingClientRect(),b=tlb.getBoundingClientRect();
+ const x=Math.min(Math.max(e.clientX,lane.left),lane.right);head.style.left=(x-b.left)+"px";tc.textContent=fmt((x-lane.left)/lane.width)}
+function goLive(){head.classList.add("live");const lane=tlb.querySelector(".lane").getBoundingClientRect(),b=tlb.getBoundingClientRect();head.style.left=(lane.right-b.left-2)+"px";
+ tlb.addEventListener("pointermove",follow);tlb.addEventListener("pointerdown",follow)}
+head.addEventListener("animationend",goLive);
+if(matchMedia("(prefers-reduced-motion:reduce)").matches)goLive();
+
+/* collections grid */
+const cnt=w=>w.count||(w.reels.length+(w.reels.length===1?" reel":" reels"));
+$("#grid").innerHTML=COLLECTIONS.map((w,i)=>`<button class="card" type="button" data-i="${i}"><div class="thumb" style="--h:${w.h}"><span class="tag">${esc(cnt(w))}</span><span class="play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg></span></div><div class="txt"><h3>${esc(w.name)}</h3><p>${esc(w.desc)}</p></div></button>`).join("");
+
+/* modal */
+const dlg=$("#dlg");let ci=0,ri=0,opener=null;
+function render(c,r,f){ci=c;ri=r;const w=COLLECTIONS[c],n=w.reels.length,id=w.reels[r];
+ $("#m").innerHTML=`<div class="stage${id?" emb":""}" style="--h:${w.h}">${id?`<iframe src="${IG(id)}embed" title="${esc(w.name)} reel ${r+1}" loading="lazy" allowfullscreen></iframe>`:`<span>Preview coming soon.</span>`}</div>
+ <div><h3 id="mt">${esc(w.name)}</h3><p style="color:var(--muted)">${esc(w.desc)}</p>
+ <dl>${w.client?`<dt>Client</dt><dd>${esc(w.client)}</dd>`:""}<dt>Scope</dt><dd>${esc(cnt(w))}</dd>${w.tools?`<dt>Tools</dt><dd>${esc(w.tools)}</dd>`:""}</dl>
+ ${n>1?`<div class="reelnav" role="group" aria-label="Reels in this collection">${w.reels.map((_,k)=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===r}">Reel ${k+1}</button>`).join("")}</div>`:""}
+ <div class="nav2">${id?`<a class="btn main" href="${IG(id)}" target="_blank" rel="noopener">Watch on Instagram</a>`:""}${n>1?`<button class="btn" type="button" id="prev">Previous reel</button><button class="btn" type="button" id="next">Next reel</button>`:""}</div></div>`;
+ document.querySelectorAll(".reelnav .chip").forEach(b=>b.onclick=()=>render(ci,+b.dataset.k,".reelnav .chip[aria-pressed='true']"));
+ const pv=$("#prev"),nx=$("#next");if(pv){pv.onclick=()=>render(ci,(ri-1+n)%n,"#prev");nx.onclick=()=>render(ci,(ri+1)%n,"#next")}
+ if(f){const el=$(f);el&&el.focus()}}
+$("#grid").onclick=e=>{const c=e.target.closest(".card");if(!c)return;opener=c;render(+c.dataset.i,0);dlg.showModal()};
+$("#x").onclick=()=>dlg.close();
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+dlg.addEventListener("close",()=>{$("#m").innerHTML="";opener&&opener.focus()});
+dlg.addEventListener("keydown",e=>{const n=COLLECTIONS[ci].reels.length;if(n<2)return;if(e.key==="ArrowRight")render(ci,(ri+1)%n,"#next");if(e.key==="ArrowLeft")render(ci,(ri-1+n)%n,"#prev")});
+</script>
+</body>
+</html>
